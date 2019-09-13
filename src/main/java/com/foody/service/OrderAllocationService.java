@@ -14,21 +14,21 @@ public class OrderAllocationService {
      * @param pickupAddress
      * @return
      */
-    public List<DeliveryPartner> getDeliverPartners(Address pickupAddress) {
+    public List<Partner> getDeliverPartners(Address pickupAddress) {
 
         //Login to get All delivery partners surrounding pickup address (may be 2 KM radius)
 
-        List<DeliveryPartner> deliveryPartners = new ArrayList<>();
-        DeliveryPartner deliveryPartner = new DeliveryPartner();
-        deliveryPartner.setId(1234);
-        deliveryPartner.setPhone("12345667");
+        List<Partner> partners = new ArrayList<>();
+        Partner partner = new Partner();
+        partner.setId(1234);
+        partner.setPhone("12345667");
         Address address = new Address();
         address.setId(1234L);
         address.setLangitude(12.34);
         address.setLatitude(31.42);
-        deliveryPartner.setAddress(address);
-        deliveryPartners.add(deliveryPartner);
-        return deliveryPartners;
+        partner.setAddress(address);
+        partners.add(partner);
+        return partners;
     }
 
     /**
@@ -38,31 +38,31 @@ public class OrderAllocationService {
      * @param customer
      * @return
      */
-    public OrderAllocation allocateOrder(Long orderId, Resturant resturant, Customer customer) {
+    public Order allocateOrder(Integer orderId, Resturant resturant, Customer customer) {
 
-        List<DeliveryPartner> deliveryPartners = getDeliverPartners(resturant.getAddress());
+        List<Partner> deliveryPartners = getDeliverPartners(resturant.getAddress());
 
-        Map<Double, List<DeliveryPartner>> partnerStringMap = new TreeMap<>();
-        for (DeliveryPartner partner : deliveryPartners) {
+        Map<Double, List<Partner>> partnerStringMap = new TreeMap<>();
+        for (Partner partner : deliveryPartners) {
             Double distance = getDistance(resturant.getAddress(), partner.getAddress(), "K");
             if(partnerStringMap.containsKey(distance)) {
-                List<DeliveryPartner> partnerList = partnerStringMap.get(distance);
+                List<Partner> partnerList = partnerStringMap.get(distance);
                 partnerList.add(partner);
                 partnerStringMap.put(distance, partnerList);
             } else {
-                List<DeliveryPartner> partners = new ArrayList<>();
+                List<Partner> partners = new ArrayList<>();
                 partners.add(partner);
                 partnerStringMap.put(distance, partners);
             }
         }
-        DeliveryPartner deliveryPartner = partnerStringMap.get(0).get(0);
-        OrderAllocation orderAllocation = new OrderAllocation();
-        orderAllocation.setOrderId(orderId);
-        orderAllocation.setDeliveryPartner(deliveryPartner);
-        orderAllocation.setCustomer(customer);
-        orderAllocation.setResturant(resturant);
+        Partner partner = partnerStringMap.get(0).get(0);
+        Order order = new Order();
+        order.setId(orderId);
+        order.setPartner(partner);
+        order.setCustomer(customer);
+        order.setResturant(resturant);
 
-        return orderAllocation;
+        return order;
     }
 
     public Double getDistance(Address l1, Address l2, String unit) {
