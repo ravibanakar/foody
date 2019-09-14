@@ -43,7 +43,7 @@ public class OrderAllocationService {
 
         Map<Double, List<Partner>> partnerStringMap = new TreeMap<>();
         for (Partner partner : deliveryPartners) {
-            Double distance = getDistance(resturant.getAddress(), partner.getAddress(), "K");
+            Double distance = getDistance(resturant.getAddress(), partner.getAddress());
             if(partnerStringMap.containsKey(distance)) {
                 List<Partner> partnerList = partnerStringMap.get(distance);
                 partnerList.add(partner);
