@@ -1,5 +1,8 @@
 package com.foody.model;
 
+import lombok.Data;
+
+@Data
 public class Address {
 
     private Long id;

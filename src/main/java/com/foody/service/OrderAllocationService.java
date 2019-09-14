@@ -2,7 +2,6 @@ package com.foody.service;
 
 import com.foody.model.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -55,14 +54,24 @@ public class OrderAllocationService {
                 partnerStringMap.put(distance, partners);
             }
         }
-        Partner partner = partnerStringMap.get(0).get(0);
+        List<Partner> partnerList = partnerStringMap.get(0);
+        Partner partner1 = Collections.min(partnerList);
+
         Order order = new Order();
         order.setId(orderId);
-        order.setPartner(partner);
+        order.setPartner(partner1);
         order.setCustomer(customer);
         order.setResturant(resturant);
 
         return order;
+    }
+
+    public Double getDistance(Address l1, Address l2) {
+        Double x1 = l1.getLangitude();
+        Double y1 = l1.getLatitude();
+        Double x2 = l2.getLangitude();
+        Double y2 = l2.getLatitude();
+        return (Math.sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)));
     }
 
     public Double getDistance(Address l1, Address l2, String unit) {
@@ -87,5 +96,7 @@ public class OrderAllocationService {
             return (dist);
         }
     }
+
+
 
 }
